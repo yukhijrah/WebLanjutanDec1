@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Post;
+use Session;
 
 class PostController extends Controller
 {
@@ -59,6 +60,7 @@ class PostController extends Controller
         $post ->save();
 
         if($post->save()){
+          Session::flash('success','Post telah berhasil dibuat');
           return redirect() ->route('posts.index');
         }
     }
@@ -86,6 +88,9 @@ class PostController extends Controller
     {
       $post = Post::find($id);
       return view('posts.edit',compact('post'));
+
+
+      Session::flash('success','Post telah berhasil diedit');
     }
 
     /**
@@ -118,6 +123,11 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = Post::find($id);
+        $post->delete();
+
+        return redirect()->route('posts.index');
+
+        Session::flash('success','Post telah berhasil dihapus');
     }
 }
